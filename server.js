@@ -57,19 +57,20 @@ app.get('/api/todos/search', function search(req, res) {
 app.get('/api/todos', function index(req, res) {
   console.log("200!");
   res.json({todos:todos});
-});
+  });
 
+var counterI = 4;
 app.post('/api/todos', function create(req, res) {
   /* This endpoint will add a todo to our "database"
    * and respond with the newly created todo.
    */
    var newtodo= {
-   _id: todos.length+=1,
+   _id: counterI++,
    task: req.body.task,
    description: req.body.description,
  };
- 
-   res.send(newtodo);
+    todos.push(newtodo);
+   res.json(newtodo);
 });
 
 app.get('/api/todos/:id', function show(req, res) {
@@ -79,9 +80,11 @@ app.get('/api/todos/:id', function show(req, res) {
    var id=req.params.id;
    for(i=0;i<todos.length;i++){
     if(todos[i]._id==id){
-   res.send(todos[i]);
+      res.json(todos[i]);
       }
    }
+   console.log('non-existed');
+
 });
 
 app.put('/api/todos/:id', function update(req, res) {
@@ -94,10 +97,10 @@ app.put('/api/todos/:id', function update(req, res) {
     if(todos[i]._id==id){
       todos[i].task=req.body.task;
       todos[i].description=req.body.description;
-      res.send(todos[i]);
+      res.json(todos[i]);
       }
     }
-   
+   console.log('non-existed');
 });
 
 app.delete('/api/todos/:id', function destroy(req, res) {
@@ -106,17 +109,12 @@ app.delete('/api/todos/:id', function destroy(req, res) {
    * with deleted todo.
    */
    var id=req.params.id;
-   res.json({todos:todos});
-   for(i=0;i<todos.length;i++){
-    if(todos[i]._id==id){
-      res.json({todos:todos});
-      todos.splice(i,1);
+   for(j=0;j<todos.length;j++){
+    if(todos[j]._id==id){
+      res.json(todos[j]);
+      todos.splice(j,1);
       }
    }
-
-   // var index = req.params.id-1;
-   // res.json({todos:todos});
-   // todos.splice(index, 1);
 
 });
 
